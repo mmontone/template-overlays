@@ -31,8 +31,9 @@ If BEG and END are numbers, they specify the bounds of the search."
 (defun tov/set-overlays (&optional force)
   (ov-set (ov-regexp-replace "{%\s*\\(.*?\\)\s*%}"
                              (lambda (match)
-                               (let ((content (buffer-substring-no-properties (match-beginning 1)
-                                                                              (match-end 1))))
+                               (let ((content (buffer-substring-no-properties
+                                               (match-beginning 1)
+                                               (match-end 1))))
                                  content)))
           'face 'font-lock-keyword-face
           'face '(:box t)
@@ -45,8 +46,9 @@ If BEG and END are numbers, they specify the bounds of the search."
 
   (ov-set (ov-regexp-replace "{{\s*\\(.*?\\)\s*}}"
                              (lambda (match)
-                               (let ((content (buffer-substring-no-properties (match-beginning 1)
-                                                                              (match-end 1))))
+                               (let ((content (buffer-substring-no-properties
+                                               (match-beginning 1)
+                                               (match-end 1))))
                                  content)))
           'face
           'font-lock-variable-name-face
