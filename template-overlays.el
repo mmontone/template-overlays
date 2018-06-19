@@ -34,11 +34,6 @@ If BEG and END are numbers, they specify the bounds of the search."
       ov-or-ovs)))
 
 (defun tov/set-overlays (&optional force)
-  (ov-set (ov-regexp-replace "lambda-" (lambda (match) (concat "<<" match ">>")))
-          'face '(:underline t
-                             :box t
-                             :weight :bold))
-
   (ov-set (ov-regexp-replace "{%\s*\\(.*?\\)\s*%}"
                              (lambda (match)
                                (let ((content (buffer-substring-no-properties (match-beginning 1)
