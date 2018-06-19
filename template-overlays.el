@@ -52,7 +52,7 @@ If BEG and END are numbers, they specify the bounds of the search."
                                  content)))
           'face '(;;:underline t
                              :box t
-                             :foreground "green"
+                             :foreground "yellow"
                              :weight :bold))
   t)
 
@@ -87,7 +87,7 @@ If BEG and END are numbers, they specify the bounds of the search."
         ;;                  (setq running nil)
         ;;                  (funcall resolve t))))
 
-        (set-overlays)
+        (tov/set-overlays)
         (delete-overlays-at-point)
         ))
     (setq last-post-command-position (point))))
