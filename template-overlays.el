@@ -1,7 +1,6 @@
 (require 'ov)
-(require 'async-await)
 
-;;(ov-placeholder (ov-insert "[Placeholder]"))
+;;(require 'async-await)
 
 (defun ov-regexp-replace (regexp replace &optional beg end)
   "Make overlays spanning the regions that match REGEXP.
@@ -34,7 +33,7 @@ If BEG and END are numbers, they specify the bounds of the search."
             (forward-char 1))))
       ov-or-ovs)))
 
-(defun set-overlays (&optional force)
+(defun tov/set-overlays (&optional force)
   (ov-set (ov-regexp-replace "lambda-" (lambda (match) (concat "<<" match ">>")))
           'face '(:underline t
                              :box t
@@ -63,57 +62,13 @@ If BEG and END are numbers, they specify the bounds of the search."
   t)
 
 
-(ov-set (ov-regexp "ov-")
-        'display "λλ-"
-        'face '(:underline t
-                           :box t
-                           :weight :bold))
-
-(buffer-substring (match-beginning 1)
-                  (match-end 1))
-
 (defun overlays-at-point ()
   (overlays-at (point)))
 
 (defun delete-overlays-at-point ()
-  (mapcar 'delete-overlay (overlays-at (point)))
-  )
+  (mapcar 'delete-overlay (overlays-at (point))))
 
-(defvar last-post-command-position 0
-  "Holds the cursor position from the last run of post-command-hooks.")
-
-(make-variable-buffer-local 'last-post-command-position)
-(make-variable-buffer-local 'last-current-word)
-(make-variable-buffer-local 'running)
-(make-variable-buffer-local 'wait-times)
-(make-variable-buffer-local 'times)
-
-(setq wait-times 5)
-(setq times 0)
-
-
-;; (defun do-stuff-if-moved-post-command ()
-;;   (unless (equal (point) last-post-command-position)
-;;     (let ((my-current-word (thing-at-point 'word)))
-;;       ;;(message "%s" my-current-word)
-;;       (when (and (not running)
-;;                  (not (equal my-current-word last-current-word)))
-;;         (deferred:$
-;;           (deferred:next
-;;             (lambda ()
-;;               (setq running t)
-;;               (message "Running")
-;;               (set-overlays)
-;;               (delete-overlays-at-point)
-;;               (setq last-current-word my-current-word)
-;;               (setq running nil)))))
-
-;;       ;;(set-overlays)
-;;       ;;(delete-overlays-at-point)
-;;       ))
-;;   (setq last-post-command-position (point)))
-
-(defun do-stuff-if-moved-post-command ()
+(defun tov/update-overlays ()
   (let ((commands (list 'outshine-self-insert-command
                         'backward-delete-char-untabify
                         'backward-delete-char
@@ -142,4 +97,26 @@ If BEG and END are numbers, they specify the bounds of the search."
         ))
     (setq last-post-command-position (point))))
 
-(add-to-list 'post-command-hook #'do-stuff-if-moved-post-command)
+(define-minor-mode template-overlays-mode
+  "Template overlays minor mode"
+  :lighter " tov"
+  (require 'ov) 
+  (message "Template overlays is %s" (if template-overlays-mode "on" "off"))
+  ;; (and template-overlays-mode
+  ;;      (eldoc-mode 1)
+  ;;      (eldoc-current-symbol)
+  ;;      (my-contextual-help :force))
+
+  (make-variable-buffer-local 'last-post-command-position)
+  (make-variable-buffer-local 'last-current-word)
+  (make-variable-buffer-local 'running)
+  (make-variable-buffer-local 'wait-times)
+  (make-variable-buffer-local 'times)
+
+  (setq wait-times 5)
+  (setq times 0)
+  (add-to-list 'post-command-hook #'tov/update-overlays)
+  
+  )
+
+(provide 'template-overlays)
