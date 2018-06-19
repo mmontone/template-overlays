@@ -16,15 +16,10 @@ If BEG and END are numbers, they specify the bounds of the search."
           (let ((ov (ov-make (match-beginning 0)
                              (match-end 0)
                              nil (not ov-sticky-front) ov-sticky-rear)))
-            
-            ;; (ov-set ov 'display (funcall replace
-            ;;                              (buffer-substring
-            ;;                                       (match-beginning 0)
-            ;;                                       (match-end 0))))
             (let ((replacement (funcall replace
-                                    (buffer-substring-no-properties
-                                     (match-beginning 0)
-                                     (match-end 0)))))
+                                        (buffer-substring-no-properties
+                                         (match-beginning 0)
+                                         (match-end 0)))))
               (overlay-put ov 'display replacement))
             (setq ov-or-ovs (cons ov ov-or-ovs))))
         (when (= (match-beginning 0) (match-end 0))
@@ -39,21 +34,28 @@ If BEG and END are numbers, they specify the bounds of the search."
                                (let ((content (buffer-substring-no-properties (match-beginning 1)
                                                                               (match-end 1))))
                                  content)))
-          'face '(;;:underline t
-                             :box t
-                             :foreground "green"
-                             ;;:background "green"
-                             :weight :bold))
+          'face 'font-lock-keyword-face
+          'face '(:box t)
+          ;; '(;;:underline t
+          ;;   :box t
+          ;;        :foreground "green"
+          ;;        ;;:background "green"
+          ;;        :weight :bold)
+          )
 
   (ov-set (ov-regexp-replace "{{\s*\\(.*?\\)\s*}}"
                              (lambda (match)
                                (let ((content (buffer-substring-no-properties (match-beginning 1)
                                                                               (match-end 1))))
                                  content)))
-          'face '(;;:underline t
-                             :box t
-                             :foreground "yellow"
-                             :weight :bold))
+          'face
+          'font-lock-variable-name-face
+          'face '(:box t)
+          ;; '(;;:underline t
+          ;;   :box t
+          ;;        :foreground "yellow"
+          ;;        :weight :bold)
+          )
   t)
 
 
@@ -75,7 +77,7 @@ If BEG and END are numbers, they specify the bounds of the search."
         (incf times)
         ;;(message "%s" my-current-word)
         (delete-overlays-at-point)
-        
+
         ;; (when (and (zerop (mod times wait-times))
         ;;            (not running)
         ;;            (not (equal my-current-word last-current-word)))
@@ -95,7 +97,7 @@ If BEG and END are numbers, they specify the bounds of the search."
 (define-minor-mode template-overlays-mode
   "Template overlays minor mode"
   :lighter " tov"
-  (require 'ov) 
+  (require 'ov)
   (message "Template overlays is %s" (if template-overlays-mode "on" "off"))
   ;; (and template-overlays-mode
   ;;      (eldoc-mode 1)
@@ -111,7 +113,7 @@ If BEG and END are numbers, they specify the bounds of the search."
   (setq wait-times 5)
   (setq times 0)
   (add-to-list 'post-command-hook #'tov/update-overlays)
-  
+
   )
 
 (provide 'template-overlays)
