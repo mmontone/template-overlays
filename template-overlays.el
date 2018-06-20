@@ -1,3 +1,4 @@
+(require 'cl)
 (require 'ov)
 
 ;;(require 'async-await)
@@ -28,66 +29,31 @@ If BEG and END are numbers, they specify the bounds of the search."
             (forward-char 1))))
       ov-or-ovs)))
 
-(defun tov/set-overlays (&optional force)
-  (ov-set (ov-regexp-replace "<%\s*\\(.*?\\)\s*%>"
-                             (lambda (match)
-                               (let ((content (buffer-substring-no-properties
-                                               (match-beginning 1)
-                                               (match-end 1))))
-                                 content)))
-          ;;'face 'font-lock-keyword-face
-          'face '(:weight bold)
-          ;; '(;;:underline t
-          ;;   :box t
-          ;;        :foreground "green"
-          ;;        ;;:background "green"
-          ;;        :weight :bold)
-          )
-  
-  (ov-set (ov-regexp-replace "{%\s*\\(.*?\\)\s*%}"
-                             (lambda (match)
-                               (let ((content (buffer-substring-no-properties
-                                               (match-beginning 1)
-                                               (match-end 1))))
-                                 content)))
-          ;;'face 'font-lock-keyword-face
-          'face '(:weight bold)
-          ;; '(;;:underline t
-          ;;   :box t
-          ;;        :foreground "green"
-          ;;        ;;:background "green"
-          ;;        :weight :bold)
-          )
+(defvar tov-default-delimiters
+  '(("{%" "%}" face (:weight bold))
+    ("{{" "}}" face (:box t))))
+   
+    
 
-  (ov-set (ov-regexp-replace "<%=\s*\\(.*?\\)\s*%>"
-                             (lambda (match)
-                               (let ((content (buffer-substring-no-properties
-                                               (match-beginning 1)
-                                               (match-end 1))))
-                                 content)))
-          ;;'face 'font-lock-variable-name-face
-          'face '(:box t :slant italic)
-          ;; '(;;:underline t
-          ;;   :box t
-          ;;        :foreground "yellow"
-          ;;        :weight :bold)
-          )
+(defvar tov-delimiters tov-default-delimiters
+  "Template overlays delimiters. A list of (delim-from delim-to &rest options)")
 
-  (ov-set (ov-regexp-replace "{{\s*\\(.*?\\)\s*}}"
-                             (lambda (match)
-                               (let ((content (buffer-substring-no-properties
-                                               (match-beginning 1)
-                                               (match-end 1))))
-                                 content)))
-          ;;'face 'font-lock-variable-name-face
-          'face '(:box t :slant italic)
-          ;; '(;;:underline t
-          ;;   :box t
-          ;;        :foreground "yellow"
-          ;;        :weight :bold)
-          )
+(defun tov-set-overlays (&optional force)
+  "Sets overlays in the current buffer"
+
+  (dolist (delim tov-delimiters)
+    (destructuring-bind (from-delim to-delim &rest options)
+        delim
+      (apply #'ov-set
+             (ov-regexp-replace
+              (concat from-delim "\s*\\(.*?\\)\s*" to-delim)
+              (lambda (match)
+                (let ((content (buffer-substring-no-properties
+                                (match-beginning 1)
+                                (match-end 1))))
+                  content)))
+              options)))
   t)
-
 
 (defun overlays-at-point ()
   (overlays-at (point)))
@@ -95,13 +61,12 @@ If BEG and END are numbers, they specify the bounds of the search."
 (defun delete-overlays-at-point ()
   (mapcar 'delete-overlay (overlays-at (point))))
 
-(defun tov/update-overlays ()
+(defun tov-update-overlays ()
   (let ((commands (list 'outshine-self-insert-command
                         'backward-delete-char-untabify
                         'backward-delete-char
                         'delete-forward-char)))
-    (message (prin1-to-string this-command))
-    (unless (or (member this-command commands)
+    (unless (or ;;(member this-command commands)
                 (equal (point) last-post-command-position))
       (let ((my-current-word (thing-at-point 'word)))
         (incf times)
@@ -119,7 +84,7 @@ If BEG and END are numbers, they specify the bounds of the search."
         ;;                  (setq running nil)
         ;;                  (funcall resolve t))))
 
-        (tov/set-overlays)
+        (tov-set-overlays)
         (delete-overlays-at-point)
         ))
     (setq last-post-command-position (point))))
@@ -142,7 +107,7 @@ If BEG and END are numbers, they specify the bounds of the search."
 
   (setq wait-times 5)
   (setq times 0)
-  (add-to-list 'post-command-hook #'tov/update-overlays)
+  (add-to-list 'post-command-hook #'tov-update-overlays)
 
   )
 
