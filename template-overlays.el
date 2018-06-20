@@ -1,3 +1,35 @@
+;;; template-overlays.el --- Emacs overlays for template systems -*- lexical-binding: t -*-
+
+;; Copyright © 2018 Mariano Montone
+;;
+;; Author: Mariano Montone <marianomontone@gmail.com>
+;; Maintainer: Mariano Montone <marianomontone@gmail.com>
+;; URL: http://www.github.com/mmontone/template-overlays
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "24.4") (ov "20150311.2228"))
+;; Keywords: templates, overlays
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;; This file is not part of GNU Emacs.
+
+;;; Commentary:
+
+;; Provides text formatting to template files via Emacs overlays
+
+;;; Code:
+
 (require 'cl)
 (require 'ov)
 
@@ -68,6 +100,7 @@ If BEG and END are numbers, they specify the bounds of the search."
       (tov-delete-overlays-at-point))
     (setq last-post-command-position (point))))
 
+;;;###autoload
 (define-minor-mode template-overlays-mode
   "Template overlays minor mode"
   :lighter " TOv"
