@@ -66,10 +66,10 @@ If BEG and END are numbers, they specify the bounds of the search."
     ("{{" "}}" face (:box t))))
 
 (defvar tov-delimiters tov-default-delimiters
-  "Template overlays delimiters. A list of (delim-from delim-to &rest options)")
+  "Template overlays delimiters.  A list of (delim-from delim-to &rest options).")
 
-(defun tov-set-overlays (&optional force)
-  "Sets overlays in the current buffer"
+(defun tov-set-overlays ()
+  "Set overlays in the current buffer."
 
   (dolist (delim tov-delimiters)
     (destructuring-bind (from-delim to-delim &rest options)
@@ -86,15 +86,18 @@ If BEG and END are numbers, they specify the bounds of the search."
   t)
 
 (defun tov-delete-all-overlays ()
+  "Remove all template overlays from current buffer."
   (remove-overlays nil nil 'category 'tov))
 
 (defun tov-delete-overlays-at-point ()
+  "Delete template overlays at point."
   (mapcar (lambda (ov)
             (when (eql (overlay-get ov 'category) 'tov)
               (delete-overlay ov)))
           (overlays-at (point))))
 
 (defun tov-update-overlays ()
+  "Update the template overlays in current buffer."
   (unless (equal (point) last-post-command-position)
     (let ((my-current-word (thing-at-point 'word)))
       (tov-set-overlays)
