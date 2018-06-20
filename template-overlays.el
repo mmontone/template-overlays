@@ -1,4 +1,4 @@
-;;; template-overlays.el --- Emacs overlays for template systems -*- coding: utf-8; lexical-binding: t -*-
+;;; template-overlays.el --- Emacs overlays for template systems -*- coding: utf-8 -*-
 
 ;; Copyright © 2018 Mariano Montone
 ;;
@@ -30,7 +30,7 @@
 
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
 (require 'ov)
 
 (defun template-overlays-regexp-replace (regexp replace &optional beg end)
@@ -78,10 +78,9 @@ If BEG and END are numbers, they specify the bounds of the search."
              (template-overlays-regexp-replace
               (concat from-delim "\s*\\(.*?\\)\s*" to-delim)
               (lambda (match)
-                (let ((content (buffer-substring-no-properties
+                (buffer-substring-no-properties
                                 (match-beginning 1)
-                                (match-end 1))))
-                  content)))
+                                (match-end 1))))                  
               options)))
   t)
 
@@ -96,12 +95,13 @@ If BEG and END are numbers, they specify the bounds of the search."
               (delete-overlay ov)))
           (overlays-at (point))))
 
+(make-variable-buffer-local 'last-post-command-position)
+
 (defun template-overlays-update-overlays ()
   "Update the template overlays in current buffer."
   (unless (equal (point) last-post-command-position)
-    (let ((my-current-word (thing-at-point 'word)))
-      (template-overlays-set-overlays)
-      (template-overlays-delete-overlays-at-point))
+    (template-overlays-set-overlays)
+    (template-overlays-delete-overlays-at-point)
     (setq last-post-command-position (point))))
 
 ;;;###autoload
@@ -115,13 +115,10 @@ If BEG and END are numbers, they specify the bounds of the search."
 
   (if template-overlays-mode
       (progn
-        (make-variable-buffer-local 'last-post-command-position)
-        (make-variable-buffer-local 'last-current-word)
         (add-hook 'post-command-hook 'template-overlays-update-overlays nil t)
         (template-overlays-update-overlays))
     (remove-hook 'post-command-hook 'template-overlays-update-overlays t)
     (kill-local-variable 'last-post-command-position)
-    (kill-local-variable 'last-current-word)
     (template-overlays-delete-all-overlays)))
 
 (provide 'template-overlays)
