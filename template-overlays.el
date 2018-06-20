@@ -2,7 +2,6 @@
 
 ;; Copyright © 2018 Mariano Montone
 ;;
-;; Name: tov
 ;; Author: Mariano Montone <marianomontone@gmail.com>
 ;; Maintainer: Mariano Montone <marianomontone@gmail.com>
 ;; URL: http://www.github.com/mmontone/template-overlays
@@ -34,7 +33,7 @@
 (require 'cl)
 (require 'ov)
 
-(defun tov-regexp-replace (regexp replace &optional beg end)
+(defun template-overlays-regexp-replace (regexp replace &optional beg end)
   "Make overlays spanning the regions that match REGEXP.
 REPLACE should be a function that is called to replace the matched REGEXP.
 If BEG and END are numbers, they specify the bounds of the search."
@@ -53,7 +52,7 @@ If BEG and END are numbers, they specify the bounds of the search."
                                          (match-beginning 0)
                                          (match-end 0)))))
               (overlay-put ov 'display replacement)
-              (overlay-put ov 'category 'tov))
+              (overlay-put ov 'category 'template-overlays))
             (setq ov-or-ovs (cons ov ov-or-ovs))))
         (when (= (match-beginning 0) (match-end 0))
           (if (eobp)
@@ -61,21 +60,21 @@ If BEG and END are numbers, they specify the bounds of the search."
             (forward-char 1))))
       ov-or-ovs)))
 
-(defvar tov-default-delimiters
+(defvar template-overlays-default-delimiters
   '(("{%" "%}" face (:weight bold))
     ("{{" "}}" face (:box t))))
 
-(defvar tov-delimiters tov-default-delimiters
+(defvar template-overlays-delimiters template-overlays-default-delimiters
   "Template overlays delimiters.  A list of (delim-from delim-to &rest options).")
 
-(defun tov-set-overlays ()
+(defun template-overlays-set-overlays ()
   "Set overlays in the current buffer."
 
-  (dolist (delim tov-delimiters)
+  (dolist (delim template-overlays-delimiters)
     (destructuring-bind (from-delim to-delim &rest options)
         delim
       (apply #'ov-set
-             (tov-regexp-replace
+             (template-overlays-regexp-replace
               (concat from-delim "\s*\\(.*?\\)\s*" to-delim)
               (lambda (match)
                 (let ((content (buffer-substring-no-properties
@@ -85,29 +84,29 @@ If BEG and END are numbers, they specify the bounds of the search."
               options)))
   t)
 
-(defun tov-delete-all-overlays ()
+(defun template-overlays-delete-all-overlays ()
   "Remove all template overlays from current buffer."
-  (remove-overlays nil nil 'category 'tov))
+  (remove-overlays nil nil 'category 'template-overlays))
 
-(defun tov-delete-overlays-at-point ()
+(defun template-overlays-delete-overlays-at-point ()
   "Delete template overlays at point."
   (mapcar (lambda (ov)
-            (when (eql (overlay-get ov 'category) 'tov)
+            (when (eql (overlay-get ov 'category) 'template-overlays)
               (delete-overlay ov)))
           (overlays-at (point))))
 
-(defun tov-update-overlays ()
+(defun template-overlays-update-overlays ()
   "Update the template overlays in current buffer."
   (unless (equal (point) last-post-command-position)
     (let ((my-current-word (thing-at-point 'word)))
-      (tov-set-overlays)
-      (tov-delete-overlays-at-point))
+      (template-overlays-set-overlays)
+      (template-overlays-delete-overlays-at-point))
     (setq last-post-command-position (point))))
 
 ;;;###autoload
 (define-minor-mode template-overlays-mode
   "Template overlays minor mode"
-  :lighter " TOv"
+  :lighter " Template-Overlays"
 
   (require 'ov)
   
@@ -117,12 +116,12 @@ If BEG and END are numbers, they specify the bounds of the search."
       (progn
         (make-variable-buffer-local 'last-post-command-position)
         (make-variable-buffer-local 'last-current-word)
-        (add-hook 'post-command-hook 'tov-update-overlays nil t)
-        (tov-update-overlays))
-    (remove-hook 'post-command-hook 'tov-update-overlays t)
+        (add-hook 'post-command-hook 'template-overlays-update-overlays nil t)
+        (template-overlays-update-overlays))
+    (remove-hook 'post-command-hook 'template-overlays-update-overlays t)
     (kill-local-variable 'last-post-command-position)
     (kill-local-variable 'last-current-word)
-    (tov-delete-all-overlays)))
+    (template-overlays-delete-all-overlays)))
 
 (provide 'template-overlays)
 
