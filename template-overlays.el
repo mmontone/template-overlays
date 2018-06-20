@@ -29,18 +29,47 @@ If BEG and END are numbers, they specify the bounds of the search."
       ov-or-ovs)))
 
 (defun tov/set-overlays (&optional force)
+  (ov-set (ov-regexp-replace "<%\s*\\(.*?\\)\s*%>"
+                             (lambda (match)
+                               (let ((content (buffer-substring-no-properties
+                                               (match-beginning 1)
+                                               (match-end 1))))
+                                 content)))
+          ;;'face 'font-lock-keyword-face
+          'face '(:weight bold)
+          ;; '(;;:underline t
+          ;;   :box t
+          ;;        :foreground "green"
+          ;;        ;;:background "green"
+          ;;        :weight :bold)
+          )
+  
   (ov-set (ov-regexp-replace "{%\s*\\(.*?\\)\s*%}"
                              (lambda (match)
                                (let ((content (buffer-substring-no-properties
                                                (match-beginning 1)
                                                (match-end 1))))
                                  content)))
-          'face 'font-lock-keyword-face
-          'face '(:box t)
+          ;;'face 'font-lock-keyword-face
+          'face '(:weight bold)
           ;; '(;;:underline t
           ;;   :box t
           ;;        :foreground "green"
           ;;        ;;:background "green"
+          ;;        :weight :bold)
+          )
+
+  (ov-set (ov-regexp-replace "<%=\s*\\(.*?\\)\s*%>"
+                             (lambda (match)
+                               (let ((content (buffer-substring-no-properties
+                                               (match-beginning 1)
+                                               (match-end 1))))
+                                 content)))
+          ;;'face 'font-lock-variable-name-face
+          'face '(:box t :slant italic)
+          ;; '(;;:underline t
+          ;;   :box t
+          ;;        :foreground "yellow"
           ;;        :weight :bold)
           )
 
@@ -50,9 +79,8 @@ If BEG and END are numbers, they specify the bounds of the search."
                                                (match-beginning 1)
                                                (match-end 1))))
                                  content)))
-          'face
-          'font-lock-variable-name-face
-          'face '(:box t)
+          ;;'face 'font-lock-variable-name-face
+          'face '(:box t :slant italic)
           ;; '(;;:underline t
           ;;   :box t
           ;;        :foreground "yellow"
