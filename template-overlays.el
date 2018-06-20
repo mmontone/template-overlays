@@ -107,7 +107,7 @@ If BEG and END are numbers, they specify the bounds of the search."
 ;;;###autoload
 (define-minor-mode template-overlays-mode
   "Template overlays minor mode"
-  :lighter " Template-Overlays"
+  :lighter " TOV"
 
   (require 'ov)
   
