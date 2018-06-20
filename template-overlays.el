@@ -1,8 +1,6 @@
 (require 'cl)
 (require 'ov)
 
-;;(require 'async-await)
-
 (defun ov-regexp-replace (regexp replace &optional beg end)
   "Make overlays spanning the regions that match REGEXP.
 REPLACE should be a function that is called to replace the matched REGEXP.
@@ -32,8 +30,6 @@ If BEG and END are numbers, they specify the bounds of the search."
 (defvar tov-default-delimiters
   '(("{%" "%}" face (:weight bold))
     ("{{" "}}" face (:box t))))
-   
-    
 
 (defvar tov-delimiters tov-default-delimiters
   "Template overlays delimiters. A list of (delim-from delim-to &rest options)")
@@ -62,53 +58,23 @@ If BEG and END are numbers, they specify the bounds of the search."
   (mapcar 'delete-overlay (overlays-at (point))))
 
 (defun tov-update-overlays ()
-  (let ((commands (list 'outshine-self-insert-command
-                        'backward-delete-char-untabify
-                        'backward-delete-char
-                        'delete-forward-char)))
-    (unless (or ;;(member this-command commands)
-                (equal (point) last-post-command-position))
-      (let ((my-current-word (thing-at-point 'word)))
-        (incf times)
-        ;;(message "%s" my-current-word)
-        (delete-overlays-at-point)
-
-        ;; (when (and (zerop (mod times wait-times))
-        ;;            (not running)
-        ;;            (not (equal my-current-word last-current-word)))
-        ;;   (promise-new (lambda (resolve _reject)
-        ;;                  (setq running t)
-        ;;                  (message "Running")
-        ;;                  (set-overlays)
-        ;;                  (setq last-current-word my-current-word)
-        ;;                  (setq running nil)
-        ;;                  (funcall resolve t))))
-
-        (tov-set-overlays)
-        (delete-overlays-at-point)
-        ))
+  (unless (equal (point) last-post-command-position)
+    (let ((my-current-word (thing-at-point 'word)))
+      (tov-set-overlays)
+      (delete-overlays-at-point))
     (setq last-post-command-position (point))))
 
 (define-minor-mode template-overlays-mode
   "Template overlays minor mode"
   :lighter " TOv"
+
   (require 'ov)
+  
   (message "Template overlays is %s" (if template-overlays-mode "on" "off"))
-  ;; (and template-overlays-mode
-  ;;      (eldoc-mode 1)
-  ;;      (eldoc-current-symbol)
-  ;;      (my-contextual-help :force))
 
   (make-variable-buffer-local 'last-post-command-position)
   (make-variable-buffer-local 'last-current-word)
-  (make-variable-buffer-local 'running)
-  (make-variable-buffer-local 'wait-times)
-  (make-variable-buffer-local 'times)
-
-  (setq wait-times 5)
-  (setq times 0)
-  (add-to-list 'post-command-hook #'tov-update-overlays)
-
-  )
+  
+  (add-to-list 'post-command-hook #'tov-update-overlays))
 
 (provide 'template-overlays)
