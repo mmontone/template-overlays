@@ -11,3 +11,15 @@ Emacs [overlays](https://www.gnu.org/software/emacs/manual/html_node/elisp/Overl
 
 (add-hook 'web-mode-hook 'template-overlays-mode)
 ```
+
+## Custom delimiters
+
+Add delimiters to `tov-delimiters`. Syntax is `(delim-from delim-to &rest options)`.
+
+```
+;; Custom template overlay delimiters
+(setcdr tov-delimiters 
+        '(("<%=" "%>" face (:box t))
+          ("<%" "%>" face (:weight bold))
+          ("{_" "_}" face (:weight bold))))
+```
