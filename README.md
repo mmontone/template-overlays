@@ -21,5 +21,5 @@ Add delimiters to `tov-delimiters`. Syntax is `(delim-from delim-to &rest option
 (setcdr (last tov-delimiters)
         '(("<%=" "%>" face (:box t))
           ("<%" "%>" face (:weight bold))
-          ("{_" "_}" face (:weight bold))))
+          ("{_" "_}" face (:slant italic))))
 ```
