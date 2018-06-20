@@ -18,7 +18,7 @@ Add delimiters to `tov-delimiters`. Syntax is `(delim-from delim-to &rest option
 
 ```
 ;; Custom template overlay delimiters
-(setcdr (last tov-delimiters)
+(setcdr (last template-overlays-delimiters)
         '(("<%=" "%>" face (:box t))
           ("<%" "%>" face (:weight bold))
           ("{_" "_}" face (:slant italic))))
