@@ -19,7 +19,8 @@ If BEG and END are numbers, they specify the bounds of the search."
                                         (buffer-substring-no-properties
                                          (match-beginning 0)
                                          (match-end 0)))))
-              (overlay-put ov 'display replacement))
+              (overlay-put ov 'display replacement)
+              (overlay-put ov 'category 'tov))
             (setq ov-or-ovs (cons ov ov-or-ovs))))
         (when (= (match-beginning 0) (match-end 0))
           (if (eobp)
@@ -51,17 +52,20 @@ If BEG and END are numbers, they specify the bounds of the search."
               options)))
   t)
 
-(defun overlays-at-point ()
-  (overlays-at (point)))
+(defun tov-delete-all-overlays ()
+  (remove-overlays nil nil 'category 'tov))
 
-(defun delete-overlays-at-point ()
-  (mapcar 'delete-overlay (overlays-at (point))))
+(defun tov-delete-overlays-at-point ()
+  (mapcar (lambda (ov)
+            (when (eql (overlay-get ov 'category) 'tov)
+              (delete-overlay ov)))
+          (overlays-at (point))))
 
 (defun tov-update-overlays ()
   (unless (equal (point) last-post-command-position)
     (let ((my-current-word (thing-at-point 'word)))
       (tov-set-overlays)
-      (delete-overlays-at-point))
+      (tov-delete-overlays-at-point))
     (setq last-post-command-position (point))))
 
 (define-minor-mode template-overlays-mode
@@ -81,6 +85,6 @@ If BEG and END are numbers, they specify the bounds of the search."
     (remove-hook 'post-command-hook 'tov-update-overlays t)
     (kill-local-variable 'last-post-command-position)
     (kill-local-variable 'last-current-word)
-    (delete-all-overlays)))
+    (tov-delete-all-overlays)))
 
 (provide 'template-overlays)
