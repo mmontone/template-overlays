@@ -1,13 +1,14 @@
-;;; template-overlays.el --- Emacs overlays for template systems -*- lexical-binding: t -*-
+;;; template-overlays.el --- Emacs overlays for template systems -*- coding: utf-8; lexical-binding: t -*-
 
 ;; Copyright © 2018 Mariano Montone
 ;;
+;; Name: tov
 ;; Author: Mariano Montone <marianomontone@gmail.com>
 ;; Maintainer: Mariano Montone <marianomontone@gmail.com>
 ;; URL: http://www.github.com/mmontone/template-overlays
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "24.4") (ov "1.0.6"))
-;; Keywords: templates, overlays
+;; Keywords: faces, convenience, templates, overlays
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,7 +34,7 @@
 (require 'cl)
 (require 'ov)
 
-(defun ov-regexp-replace (regexp replace &optional beg end)
+(defun tov-regexp-replace (regexp replace &optional beg end)
   "Make overlays spanning the regions that match REGEXP.
 REPLACE should be a function that is called to replace the matched REGEXP.
 If BEG and END are numbers, they specify the bounds of the search."
@@ -74,7 +75,7 @@ If BEG and END are numbers, they specify the bounds of the search."
     (destructuring-bind (from-delim to-delim &rest options)
         delim
       (apply #'ov-set
-             (ov-regexp-replace
+             (tov-regexp-replace
               (concat from-delim "\s*\\(.*?\\)\s*" to-delim)
               (lambda (match)
                 (let ((content (buffer-substring-no-properties
@@ -121,3 +122,5 @@ If BEG and END are numbers, they specify the bounds of the search."
     (tov-delete-all-overlays)))
 
 (provide 'template-overlays)
+
+;;; template-overlays.el ends here
