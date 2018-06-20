@@ -6,7 +6,7 @@
 ;; Maintainer: Mariano Montone <marianomontone@gmail.com>
 ;; URL: http://www.github.com/mmontone/template-overlays
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.4") (ov "20150311.2228"))
+;; Package-Requires: ((emacs "24.4") (ov "1.0.6"))
 ;; Keywords: templates, overlays
 
 ;; This program is free software: you can redistribute it and/or modify
