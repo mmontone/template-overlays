@@ -14,7 +14,7 @@ Emacs [overlays](https://www.gnu.org/software/emacs/manual/html_node/elisp/Overl
 
 ## Custom delimiters
 
-Add delimiters to `tov-delimiters`. Syntax is `(delim-from delim-to &rest options)`.
+Add delimiters to `template-overlays-delimiters`. Syntax is `(delim-from delim-to &rest options)`.
 
 ```
 ;; Custom template overlay delimiters
