@@ -70,11 +70,17 @@ If BEG and END are numbers, they specify the bounds of the search."
 
   (require 'ov)
   
-  (message "Template overlays is %s" (if template-overlays-mode "on" "off"))
+  (message "Template overlays are %s" (if template-overlays-mode "ON" "OFF"))
 
-  (make-variable-buffer-local 'last-post-command-position)
-  (make-variable-buffer-local 'last-current-word)
-  
-  (add-to-list 'post-command-hook #'tov-update-overlays))
+  (if template-overlays-mode
+      (progn
+        (make-variable-buffer-local 'last-post-command-position)
+        (make-variable-buffer-local 'last-current-word)
+        (add-hook 'post-command-hook 'tov-update-overlays nil t)
+        (tov-update-overlays))
+    (remove-hook 'post-command-hook 'tov-update-overlays t)
+    (kill-local-variable 'last-post-command-position)
+    (kill-local-variable 'last-current-word)
+    (delete-all-overlays)))
 
 (provide 'template-overlays)
