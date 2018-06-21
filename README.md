@@ -8,6 +8,7 @@ Emacs [overlays](https://www.gnu.org/software/emacs/manual/html_node/elisp/Overl
 
 ### Via el-get
 
+```
 (push '(:name template-overlays
               :type git
               :url "git://github.com/mmontone/template-overlays.git"
@@ -16,6 +17,7 @@ Emacs [overlays](https://www.gnu.org/software/emacs/manual/html_node/elisp/Overl
       el-get-sources)
 
 (el-get 'sync '(template-overlays))
+```
 
 ## Use
 
