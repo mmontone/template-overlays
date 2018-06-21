@@ -1,4 +1,4 @@
-;;; template-overlays.el --- Emacs overlays for template systems -*- coding: utf-8 -*-
+;;; template-overlays.el --- Emacs overlays for template files -*- coding: utf-8 -*-
 
 ;; Copyright © 2018 Mariano Montone
 ;;
