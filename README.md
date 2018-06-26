@@ -13,6 +13,7 @@ Emacs [overlays](https://www.gnu.org/software/emacs/manual/html_node/elisp/Overl
               :type git
               :url "git://github.com/mmontone/template-overlays.git"
               :features template-overlays
+              :depends (ov)
               :compile "template-overlays.el")
       el-get-sources)
 
