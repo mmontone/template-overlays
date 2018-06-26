@@ -63,7 +63,8 @@ If BEG and END are numbers, they specify the bounds of the search."
 (defvar template-overlays-default-delimiters
   '(("{%" "%}" face (:weight bold))
     ("{{" "}}" face (:box t))
-    ("<!--" "-->" face (:slant italic))))
+    ("<!--" "-->" face (:slant italic))
+    ("{#" "#}" face (:slant italic))))
 
 (defvar template-overlays-delimiters template-overlays-default-delimiters
   "Template overlays delimiters.  A list of (delim-from delim-to &rest options).")
