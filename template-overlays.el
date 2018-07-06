@@ -1,4 +1,4 @@
-;;; template-overlays.el --- Emacs overlays for template files -*- coding: utf-8 -*-
+;;; template-overlays.el --- Display template regions using overlays -*- coding: utf-8 -*-
 
 ;; Copyright © 2018 Mariano Montone
 ;;
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; Provides text formatting to template files via Emacs overlays
+;; Display template regions using overlays.
 
 ;;; Code:
 
