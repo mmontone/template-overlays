@@ -1,10 +1,16 @@
-# template-overlays
+# template-overlays [![melpa badge][melpa-badge]][melpa-link]
 
 Emacs [overlays](https://www.gnu.org/software/emacs/manual/html_node/elisp/Overlays.html) for template files
 
 ![Screenshot](https://bitbucket.org/mmontone/template-overlays/raw/8b62abafa48cf72b54d11884717f9969a95b07ce/template-overlays.gif "Screenshot")
 
 ## Install
+
+### MELPA
+
+It is available at MELPA
+
+[![melpa badge][melpa-badge]][melpa-link]
 
 ### Via el-get
 
@@ -39,3 +45,5 @@ Add delimiters to `template-overlays-delimiters`. Syntax is `(delim-from delim-t
           ("<%" "%>" face (:weight bold))
           ("{_" "_}" face (:slant italic))))
 ```
+[melpa-link]: http://melpa.org/#/template-overlays
+[melpa-badge]: http://melpa.org/packages/template-overlays-badge.svg
